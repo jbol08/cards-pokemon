@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import axios from "axios";
+import uuid from "uuid";
 
 const useAxios = (baseUrl) => {
-    const [responses, setResponses] = useState()
-    const addResponseData = async (formatter = data => data, restOfUrl = "") => {
-        const response = await axios.get(`${baseUrl}${restOfUrl}`);
-        setResponses(data => [...data, formatter(response.data)]);
-    };
+	const [ responses, setResponses ] = useState([]);
 
-    
+	const addData = async (restOfUrl = '') => {
+		const resp = await axios.get(`${baseUrl}${restOfUrl}`);
+		setResponses((response) => [ ...response, { ...resp.data, id: uuid() } ]);
+	};
 
-    return [responses, addResponseData];
-}
+    return [ responses, addData ];
+};
 
-export { useAxios };
+  
+
+export {  useAxios };
